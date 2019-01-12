@@ -1,7 +1,5 @@
 #include <math.h>
-#include <iostream>
-#include <C:\Users\RD SINGH\Desktop\General\Robotics\ShawniganLakeCode\include\PID.h>
-#include <C:\Users\RD SINGH\Desktop\General\Robotics\ShawniganLakeCode\include\main.h>
+#include "PID.h"
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -19,33 +17,6 @@
 
 
 
-/*void targetTurn(int speed)
-{
-  pros::Motor leftBDrive_mtr(1, MOTOR_GEARSET_18, false, MOTOR_ENCODER_ROTATIONS);
-  pros::Motor rightBDrive_mtr(2, MOTOR_GEARSET_18, false, MOTOR_ENCODER_ROTATIONS);
-  pros::Motor leftFDrive_mtr(3, MOTOR_GEARSET_18, false, MOTOR_ENCODER_ROTATIONS);
-  pros::Motor rightFDrive_mtr(4, MOTOR_GEARSET_18, false, MOTOR_ENCODER_ROTATIONS);
-  pros::Vision vision_sensor(9);
-
-  pros::vision_object_s_t obj = vision_sensor.get_by_sig(0, 1);
-
-  int center = 320;
-
-  int midCoord = obj.x_middle_coord;
-
-  while(center != (midCoord + 5) || center != (midCoord -5))
-  {
-    leftBDrive_mtr.move(speed);
-    rightBDrive_mtr.move(speed);
-    leftFDrive_mtr.move(speed);
-    rightFDrive_mtr.move(speed);
-  }
-
-  driveMotors(0);
-  driveBrakeHold();
-  resetPos();
-
-}*/
 
 /*void skillsAuton()
 {
@@ -279,7 +250,7 @@
   resetPos();
 
 }*/
-
+/*
 void skillsAuton()
 {
   pros::Motor flyLWheel_mtr(5, MOTOR_GEARSET_18, true, MOTOR_ENCODER_ROTATIONS);
@@ -791,37 +762,9 @@ void redBackAuton()
 
   moveDrive(50, 87, 0, 0, -90);
 
-}
+}*/
 
 void autonomous()
 {
-  pros::ADIDigitalIn jumper1 (1);
-  pros::ADIDigitalIn jumper2 (2);
-  pros::ADIDigitalIn jumper3 (3);
-  pros::ADIDigitalIn jumper4 (4);
-  pros::ADIDigitalIn jumper5 (5);
-  pros::ADIDigitalIn jumper6 (6);
-  pros::ADIDigitalIn jumper7 (7);
-  pros::ADIDigitalIn jumper8 (8);
-
-  if(jumper1.get_value() == 1)
-  {
-    blueFrontAuton();
-  }
-  else if(jumper2.get_value() == 1)
-  {
-    redFrontAuton();
-  }
-  else if(jumper3.get_value() == 1)
-  {
-    blueBackAuton();
-  }
-  else if(jumper4.get_value() == 1)
-  {
-    redBackAuton();
-  }
-  else if(jumper5.get_value() == 1)
-  {
-    skillsAuton();
-  }
+  moveDrive(10, 91, 0, 0, 0);
 }
