@@ -1,15 +1,19 @@
-#include <C:\Users\RD SINGH\Desktop\General\Robotics\ShawniganLakeCode\include\main.h>
+#include "main.h"
 #include <math.h>
 
 
-pros::Motor leftBDrive_mtr(1, MOTOR_GEARSET_18, false, MOTOR_ENCODER_ROTATIONS);
-pros::Motor rightBDrive_mtr(2, MOTOR_GEARSET_18, true, MOTOR_ENCODER_ROTATIONS);
-pros::Motor leftFDrive_mtr(3, MOTOR_GEARSET_18, false, MOTOR_ENCODER_ROTATIONS);
-pros::Motor rightFDrive_mtr(4, MOTOR_GEARSET_18, true, MOTOR_ENCODER_ROTATIONS);
+pros::Motor leftBDrive_mtr(11, MOTOR_GEARSET_18, false, MOTOR_ENCODER_ROTATIONS);
+pros::Motor rightBDrive_mtr(12, MOTOR_GEARSET_18, true, MOTOR_ENCODER_ROTATIONS);
+pros::Motor leftFDrive_mtr(1, MOTOR_GEARSET_18, false, MOTOR_ENCODER_ROTATIONS);
+pros::Motor rightFDrive_mtr(2, MOTOR_GEARSET_18, true, MOTOR_ENCODER_ROTATIONS);
 
-pros::Motor flyLWheel_mtr(5, MOTOR_GEARSET_18, true, MOTOR_ENCODER_ROTATIONS);
-pros::Motor flyRWheel_mtr(6, MOTOR_GEARSET_18, false, MOTOR_ENCODER_ROTATIONS);
-pros::Motor ballIntake_mtr(7, MOTOR_GEARSET_18, true, MOTOR_ENCODER_ROTATIONS);
+pros::Motor flyWheel_mtr(10, MOTOR_GEARSET_18, false, MOTOR_ENCODER_ROTATIONS);
+pros::Motor ballIntake_mtr(3, MOTOR_GEARSET_18, true, MOTOR_ENCODER_ROTATIONS);
+pros::Motor indexer(4, MOTOR_GEARSET_18, true, MOTOR_ENCODER_ROTATIONS);
+
+pros::ADIUltrasonic leftSensor('A', 'B');
+pros::ADIUltrasonic rightSensor('C', 'D');
+
 
 void driveMotors(int speed)
 {
@@ -164,13 +168,13 @@ static void turnPID(int power)
   leftBDrive_mtr.move(powerLeft);
   rightBDrive_mtr.move(-powerRight);
 }
+
 static void flyCoast()
 {
-  flyLWheel_mtr.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  flyRWheel_mtr.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  flyWheel_mtr.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 }
 
-static void moveDrive(double targetDistance, int maxPower, int flyWheelP, int flipperP, int intakeP)
+static void moveDrive(double targetDistance, int maxPower, int flyWheelP, int indexerP, int intakeP)
 {
 	double kp = 0.695;
 
@@ -181,16 +185,12 @@ static void moveDrive(double targetDistance, int maxPower, int flyWheelP, int fl
 
   int leftF, leftB, rightF, rightB;
 
-  pros::Motor lfdMotor (1, MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
-  pros::Motor rfdMotor (2, MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
-  pros::Motor leftBDrive_mtr (3, MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
-  pros::Motor rbdMotor (4, MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
 
 	while(error != 0)
 	{
     leftF = abs(leftFDrive_mtr.get_position());
     leftB = abs(leftBDrive_mtr.get_position());
-    rightF = abs(rfdMotor.get_position());
+    rightF = abs(rightFDrive_mtr.get_position());
     rightB = abs(rightBDrive_mtr.get_position());
 
 		currentDistance = (leftF + rightF)/2;
@@ -198,9 +198,9 @@ static void moveDrive(double targetDistance, int maxPower, int flyWheelP, int fl
 		error = targ - currentDistance;
 
     ballIntake_mtr.move(intakeP);
+    indexer.move(indexerP);
 
-    flyLWheel_mtr.move(flyWheelP);
-    flyRWheel_mtr.move(flyWheelP);
+    flyWheel_mtr.move(flyWheelP);
 
     movePID(maxPower);
 
